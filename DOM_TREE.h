@@ -26,8 +26,11 @@ class DOMTree
 		int altura();
 		int max(int x, int y);
 		DOMTree ChildNode(int p);
+		DOMTree getElementbyID(string id);
+		void search_element(Node* raiz ,string id, bool &band, Node* elemento);
 		//modificadores
 		void appendChild(DOMTree a, int p);// + pos
+		
 		void removeChild(int pos);//*
 		void agregarhijo(Element padre, Element hijo);
 		void replaceChild(DOMTree a, int p);
@@ -132,6 +135,41 @@ DOMTree DOMTree::ChildNode(int p)
 	return(tree);
 }
 
+DOMTree DOMTree::getElementbyID(string id)
+{
+	DOMTree tree;
+	Node *aux=NULL;
+	bool band = false;
+	
+	this->search_element(document, id, band, aux);
+	tree.document=cpy_nodo(aux);
+	if(tree.document->nextsibling()!=NULL)
+	{
+		tree.document->setNextSibling(NULL);
+	}
+	return(tree);
+	
+}
+
+void DOMTree::search_element(Node* raiz ,string id, bool &band, Node* elemento )
+{
+	if(raiz!=NULL)
+	{
+		if(raiz->element().tagName()==id)
+		{
+			elemento=raiz;
+			band=true;
+		}
+		else
+		{
+			search_element(raiz->firstchild(), id, band, elemento);
+			if(band == false)
+			{
+				search_element(raiz->firstchild(), id, band, elemento);
+			}
+		}
+	}	
+}
 //Modificadores
 
 
