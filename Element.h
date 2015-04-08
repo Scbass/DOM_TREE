@@ -2,11 +2,9 @@
 #define Element_h
 #include <iostream>
 #include <string>
-#include <list>
-
+#include "link_l.h"
 using std::string;
 using std::cout;
-using std::list;
 
 class Element
 {
@@ -14,7 +12,7 @@ class Element
 	private:
 	
 	string tag, iHTML;
-	list<string> attrList;
+    Lista<string> attrList;
 
 	public:
 	
@@ -22,12 +20,21 @@ class Element
 	Element(string tagN): tag(tagN), iHTML(""){} 
 	//Observacion
 	string tagName() {return tag;}
-	list<string> attributeList() {return attrList;}
+	Lista<string> attributeList() {return attrList;}
 	string innerHTML() {return iHTML;}
 	//Modificadfores
 	void setTagName(string tagN) {this->tag=tagN;}
-	void setAtributteList(list<string> l) {this->attrList=l;}
+	void setAtributteList(Lista<string> l) {this->attrList=l;}
 	void setInnnerHTML(string iHTML) {this->iHTML=iHTML;}	
-
+	//sobrecargas
+	bool operator ==(Element x); //Sobrecarga del operador ==
+	
 };
+
+
+bool Element::operator ==(Element x) 
+{
+		return(this->tag == x.tag && this->iHTML == x.iHTML && this->attrList==x.attrList);
+}
+
 #endif

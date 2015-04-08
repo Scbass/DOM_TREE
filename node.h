@@ -3,25 +3,25 @@
 #include <iostream>
 #include "Element.h"
 
-template<class M>
+
 class Node
 {
 	private:
 	
-	M e;
-	Node<M> *fc, *ns;
+	Element e;
+	Node *fc, *ns;
 	
 	public:
 	
 	//Constructores
-	Node(M e): e(e), fc(NULL), ns(NULL){}
-	Node(M e, Node *hji, Node *hd): e(e), fc(hji), ns(hd){}
+	Node(Element e): e(e), fc(NULL), ns(NULL){}
+	Node(Element e, Node *hji, Node *hd): e(e), fc(hji), ns(hd){}
 	//Observadores
 	Node* firstchild() const {return fc;}
 	Node* nextsibling() const {return ns;}
-	M element() const {return e;}
+	Element element() const {return e;}
 	//Modificadores
-	void setElement(M e) {this->info=e;}
+	void setElement(Element info) {this-> e =info ;}
 	void setFirstChild(Node *child) {this->fc=child;}
 	void setNextSibling(Node *hji) {this->ns=hji;}	
 	

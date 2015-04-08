@@ -25,10 +25,12 @@ class DOMTree
 		Element raiz() {return document->element();}
 		int altura();
 		int max(int x, int y);
+		DOMTree ChildNode(int p);
 		//modificadores
-		void insertsubarb(DOMTree a, int p);// + pos
-		void elimsubar(int pos);//*
+		void appendChild(DOMTree a, int p);// + pos
+		void removeChild(int pos);//*
 		void agregarhijo(Element padre, Element hijo);
+		void replaceChild(DOMTree a, int p);
 		//Destructores
 		void destroy();
 		~DOMTree();
@@ -86,25 +88,54 @@ void DOMTree::altura(Node *root, int &a)
 		a= -1;
 	else
 	{
-			this->altura(root->firstchild(), ai);
-			this->altura(root->nextsibling(), ad);
-			if(root->firstchild()==NULL)
-				a=max(ai,ad);
-			else
-				a=max(ai,ad)+1;	
+		this->altura(root->firstchild(), ai);
+		this->altura(root->nextsibling(), ad);
+		if(root->firstchild()==NULL)
+			a=max(ai,ad);
+		else
+			a=max(ai,ad)+1;	
 	}
 }
 
 
 int DOMTree::max(int x,int y)
 {
-		return(x<y ? y:x); 	
+	return(x<y ? y:x); 	
+}
+
+DOMTree DOMTree::ChildNode(int p)
+{
+	Node *aux;
+	DOMTree tree;
+	int i;
+	aux=document;
+	if(p==1)
+	{
+		tree.document=cpy_nodo(aux->firstchild());
+		tree.document->setNextSibling(NULL);
+	}
+	else
+	{
+		i=2;
+		aux=aux->firstchild();
+		while(aux->nextsibling()!=NULL && i<p-1)
+			{
+				aux=aux->nextsibling();
+				i++;
+			}
+			if(i==p)
+			{
+				tree.document=cpy_nodo(aux);
+				tree.document->setNextSibling(NULL);
+			}		
+	}
+	return(tree);
 }
 
 //Modificadores
 
 
-void DOMTree::insertsubarb(DOMTree a, int p)
+void DOMTree::appendChild(DOMTree a, int p)
 {
 	Node*aux;
 	
@@ -122,7 +153,7 @@ void DOMTree::insertsubarb(DOMTree a, int p)
 }
 
 
-void DOMTree::elimsubar(int pos)
+void DOMTree::removeChild(int pos)
 {
 	Node *ant, *sig;
 	int i;
@@ -190,6 +221,12 @@ void DOMTree:: agregarhijo(Node *root,Element padre, Element hijo, bool &band)
 			}
 		}
 	}
+}
+
+void DOMTree::replaceChild(DOMTree a, int p)
+{
+	this->removeChild(p);
+	this->appendChild(a, p);
 }
 
 //Privados
