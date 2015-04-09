@@ -1,7 +1,11 @@
 #ifndef DOMTree_h
 #define DOMTree_h
 #include <iostream>
+#include <string>
 #include "node.h"
+
+using std::string;
+using std::cout;
 
 class DOMTree
 {
@@ -10,16 +14,17 @@ class DOMTree
 		Node *document;
 	
 		//Metodos
-		Node* cpy_nodo(Node *root); //* 
+		Node* cpy_nodo(Node *root);  
 		void  destroy(Node *root);
 		void altura(Node *root, int &a);
 		void agregarhijo(Node *root, Element padre, Element hijo, bool &band);
 		
 	public:
 		//Constructores
-		DOMTree(): document(NULL){} //*
+		DOMTree(): document(NULL){}
+		DOMTree(Node* docum): document(docum){}
 		DOMTree(const DOMTree &a);
-		DOMTree(Element e, Lista<DOMTree > l);//*
+		DOMTree(Element e, Lista<DOMTree > l);
 		//Observadores
 		bool es_nulo(){return (document==NULL);}
 		Element raiz() {return document->element();}
@@ -29,14 +34,16 @@ class DOMTree
 		DOMTree getElementByID(string id);
 		void search_element(Node* raiz ,string id, bool &band, Node* &elemento);
 		//modificadores
-		void appendChild(DOMTree a, int p);// + pos
-		
-		void removeChild(int pos);//*
+		DOMTree stringToDOMTree(string d);
+		void appendChild(DOMTree a);
+		void appendChild(DOMTree a, int pos);// + pos
+		void removeChild(int pos);
 		void agregarhijo(Element padre, Element hijo);
 		void replaceChild(DOMTree a, int p);
 		//Destructores
 		void destroy();
 		~DOMTree();
+		//Sobrercargas
 };
 
 //Constructores
@@ -173,7 +180,60 @@ void DOMTree::search_element(Node* raiz ,string id, bool &band, Node* &elemento 
 //Modificadores
 
 
-void DOMTree::appendChild(DOMTree a, int p)
+DOMTree DOMTree::stringToDOMTree(string d)
+{
+	string tag, inner, aux;
+	Node *doc, *doc2, *child;
+	int i;
+	
+	d.erase();
+	aux=d[0];
+	d.erase();
+	tag=aux;
+	aux=d[0];
+	while(!(aux=="<"))
+	{
+		inner=inner+aux;
+		d.erase();
+		aux=d[0];
+	}
+	Element elem(tag,inner);
+	doc=new Node(elem);
+	child=doc->firstchild();
+	while(d.length()!=0)
+	{
+		d.erase();
+		tag=d[0];
+		if(!(tag=="/"))
+		{
+			d.erase();
+			d.erase();
+			aux=d[0];
+			inner=aux;
+			d.erase();
+			aux=d[0];
+			while(!(aux=="<"))
+			{
+				inner=inner+aux;
+				d.erase();
+				aux=d[0];
+			}
+			Element elem2(tag,inner);
+			doc2= new Node(elem2);
+			child=doc2;
+			child=child->nextsibling();
+		}
+		else
+		{
+			for(i=1;i<=3;i++)
+			d.erase();
+		}
+	}
+	DOMTree tree(doc);
+return(tree);
+}
+
+void DOMTree::appendChild(DOMTree a)
 {
 	Node*aux;
 	
