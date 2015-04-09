@@ -22,9 +22,9 @@ class DOMTree
 	public:
 		//Constructores
 		DOMTree(): document(NULL){}
-		DOMTree(Node* docum): document(docum){}
-		DOMTree(const DOMTree &a);
-		DOMTree(Element e, Lista<DOMTree > l);
+		DOMTree(Node* docum): document(docum){} //con parametros0
+		DOMTree(const DOMTree &a); //copia
+		DOMTree(Element e, Lista<DOMTree > l); // a partir de una lista de hijos
 		//Observadores
 		bool es_nulo(){return (document==NULL);}
 		Element raiz() {return document->element();}
@@ -34,9 +34,8 @@ class DOMTree
 		DOMTree getElementByID(string id);
 		void search_element(Node* raiz ,string id, bool &band, Node* &elemento);
 		//modificadores
-		DOMTree stringToDOMTree(string d);
 		void appendChild(DOMTree a);
-		void appendChild(DOMTree a, int pos);// + pos
+		void appendChild(DOMTree a, int pos);
 		void removeChild(int pos);
 		void agregarhijo(Element padre, Element hijo);
 		void replaceChild(DOMTree a, int p);
@@ -44,6 +43,9 @@ class DOMTree
 		void destroy();
 		~DOMTree();
 		//Sobrercargas
+		DOMTree stringToDOMTree(string d);
+		void appendChild(string a);
+		void appendChild(string a, int pos);
 };
 
 //Constructores
@@ -248,6 +250,14 @@ void DOMTree::appendChild(DOMTree a)
 		}
 		aux->setNextSibling(this->cpy_nodo(a.document));
 	}
+}
+
+void DOMTree::appendChild(string a)
+{
+	DOMTree tree;
+	
+	tree=stringToDOMTree(a);
+	appendChild(tree);
 }
 
 
