@@ -43,6 +43,7 @@ class DOMTree
 		//Destructores
 		void destroy();
 		~DOMTree();
+		//Sobrercargas
 };
 
 //Constructores
