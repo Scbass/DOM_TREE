@@ -25,9 +25,9 @@ class DOMTree
 		Element raiz() {return document->element();}
 		int altura();
 		int max(int x, int y);
-		DOMTree ChildNode(int p);
-		DOMTree getElementbyID(string id);
-		void search_element(Node* raiz ,string id, bool &band, Node* elemento);
+		DOMTree childNode(int p);
+		DOMTree getElementByID(string id);
+		void search_element(Node* raiz ,string id, bool &band, Node* &elemento);
 		//modificadores
 		void appendChild(DOMTree a, int p);// + pos
 		
@@ -106,7 +106,7 @@ int DOMTree::max(int x,int y)
 	return(x<y ? y:x); 	
 }
 
-DOMTree DOMTree::ChildNode(int p)
+DOMTree DOMTree::childNode(int p)
 {
 	Node *aux;
 	DOMTree tree;
@@ -135,7 +135,7 @@ DOMTree DOMTree::ChildNode(int p)
 	return(tree);
 }
 
-DOMTree DOMTree::getElementbyID(string id)
+DOMTree DOMTree::getElementByID(string id)
 {
 	DOMTree tree;
 	Node *aux=NULL;
@@ -151,7 +151,7 @@ DOMTree DOMTree::getElementbyID(string id)
 	
 }
 
-void DOMTree::search_element(Node* raiz ,string id, bool &band, Node* elemento )
+void DOMTree::search_element(Node* raiz ,string id, bool &band, Node* &elemento )
 {
 	if(raiz!=NULL)
 	{
@@ -193,35 +193,41 @@ void DOMTree::appendChild(DOMTree a, int p)
 
 void DOMTree::removeChild(int pos)
 {
-	Node *ant, *sig;
-	int i;
+	Node *prev, *next, *aux;
 	
-		ant=document;
-		
-		if(pos==1)
-		{
-			sig=ant->firstchild();
-			ant->setFirstChild(sig->nextsibling());
-			sig->setNextSibling(NULL);
-			this->destroy(sig);	
-		}	
-		else
-		{
-			i=2;
-			ant=ant->firstchild();
-			while(ant->nextsibling()!=NULL && i<pos-1)
+	prev=document->firstchild();
+	aux=prev;
+	if(prev!=NULL)
+	{	
+		next=prev->nextsibling();
+			if(pos==1)
 			{
-				ant=ant->nextsibling();
-				i++;
+				document->setFirstChild(next);
+				next=NULL;
+				this->destroy(aux->firstchild());
+				delete(aux);
 			}
-			if(i==pos)
+			else
 			{
-				sig=ant->nextsibling();
-				ant->setNextSibling(sig->nextsibling());
-				sig->setNextSibling(NULL);
-				this->destroy(sig);
-			}		
+			pos--;
+			while(next!=NULL && pos!=0) //muevo el apuntador a donde quiero eliminar
+			{
+				aux=next;
+				next=next->nextsibling();
+				if(pos!=1)
+					prev=aux;
+				pos--;
+			}
+			if(next!=NULL || pos==0) //evalua que no trate de eliminar en una pos que no existe
+			{
+				prev->setNextSibling(next);
+				next=NULL;
+				this->destroy(aux->firstchild());
+				delete(aux);
+			
+			}
 		}
+	}
 }
 
 

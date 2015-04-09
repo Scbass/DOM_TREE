@@ -27,10 +27,10 @@ class Element
 	void setTagName(string tagN) {this->tag=tagN;}
 	void setAtributteList(Lista<string> l) {this->attrList=l;}
 	void setInnnerHTML(string iHTML) {this->iHTML=iHTML;}
-	void cpy_element(Element x);	
+	void cpy_element(Element const &x);	
 	//sobrecargas
 	bool operator ==(Element x); //Sobrecarga del operador ==
-	Element operator =(Element x);
+	Element operator =(Element const &x);
 };
 
 //Constructor copia
@@ -39,7 +39,7 @@ Element::Element(Element const &e)
 	this->cpy_element(e);
 }
 
-void Element::cpy_element(Element x)
+void Element::cpy_element(Element const &x)
 {
 	this->tag=x.tag;
 	this->iHTML=x.iHTML;
@@ -53,7 +53,7 @@ bool Element::operator ==(Element x)
 		return(this->tag == x.tag && this->iHTML == x.iHTML && this->attrList==x.attrList);
 }
 
-Element Element::operator =(Element x)
+Element Element::operator =(Element const &x)
 {
 	this->cpy_element(x);
 	return(*this);
