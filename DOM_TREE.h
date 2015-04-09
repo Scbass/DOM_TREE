@@ -46,6 +46,7 @@ class DOMTree
 		DOMTree stringToDOMTree(string d);
 		void appendChild(string a);
 		void appendChild(string a, int pos);
+		DOMTree operator =(DOMTree const &tree);
 };
 
 //Constructores
@@ -260,6 +261,10 @@ void DOMTree::appendChild(string a)
 	appendChild(tree);
 }
 
+void DOMTree::appendChild(DOMTree a, int p)
+{
+	
+}
 
 void DOMTree::removeChild(int pos)
 {
@@ -383,4 +388,14 @@ DOMTree::~DOMTree()
 {
 	destroy(document);
 }
+
+
+//sobrecargas
+DOMTree DOMTree::operator =(DOMTree const &tree)
+{
+	this->document=this->cpy_nodo(tree.document);
+	return(*this);
+	
+}
+
 #endif
