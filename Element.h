@@ -18,6 +18,7 @@ class Element
 	
 	//Constructor
 	Element(string tagN): tag(tagN), iHTML(""){} 
+	Element(string tagN, string ihTML): tag(tagN), iHTML(ihTML){}
 	Element(Element const &e); //constructor copia
 	//Observacion
 	string tagName() {return tag;}
