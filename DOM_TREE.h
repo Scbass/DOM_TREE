@@ -7,6 +7,7 @@
 using std::string;
 using std::cout;
 using std::endl;
+
 class DOMTree
 {
 	private:
@@ -372,49 +373,67 @@ DOMTree DOMTree::stringToDOMTree(string d)
 {
 	string tag, inner, aux;
 	Node *doc, *doc2, *child;
-	int i;
-	
-	d.erase();
+
+	d.erase(d.begin());
 	aux=d[0];
-	d.erase();
-	tag=aux;
+	while(!(aux==">"))
+	{
+	tag=tag+aux;
+	d.erase(d.begin());
+	aux=d[0];
+	}
+	cout<<tag<<endl;//*
+	d.erase(d.begin());
 	aux=d[0];
 	while(!(aux=="<"))
 	{
 		inner=inner+aux;
-		d.erase();
+		d.erase(d.begin());
 		aux=d[0];
 	}
+	cout<<inner<<endl;//*
 	Element elem(tag,inner);
 	doc=new Node(elem);
-	child=doc->firstchild();
-	while(d.length()!=0)
+	child=doc;
+	cout<<d<<endl; //*
+	while(d.length()>1)
 	{
-		d.erase();
-		tag=d[0];
-		if(!(tag=="/"))
+		tag.erase(); //limpieza de variables
+		inner.erase();
+		d.erase(d.begin());
+		aux=d[0];
+		if(!(aux=="/"))
 		{
-			d.erase();
-			d.erase();
+			while(!(aux==">"))
+			{
+			tag=tag+aux;
+			d.erase(d.begin());
 			aux=d[0];
-			inner=aux;
-			d.erase();
+			}
+			d.erase(d.begin());
 			aux=d[0];
+			cout<<tag<<endl;//*
 			while(!(aux=="<"))
 			{
-				inner=inner+aux;
-				d.erase();
-				aux=d[0];
+			inner=inner+aux;
+			d.erase(d.begin());
+			aux=d[0];
 			}
+			cout<<inner<<endl;//*
 			Element elem2(tag,inner);
 			doc2= new Node(elem2);
+			child->setFirstChild(doc2);
 			child=doc2;
-			child=child->nextsibling();
+			//child=child->nextsibling();
 		}
 		else
 		{
-			for(i=1;i<=3;i++)
-			d.erase();
+			while(!(aux==">"))
+			{
+			d.erase(d.begin());
+			aux=d[0];
+			}
+			d.erase(d.begin());
 		}
 	}
 	DOMTree tree(doc);
@@ -425,7 +444,7 @@ void DOMTree::appendChild(string a)
 {
 	DOMTree tree;
 	
-	tree=stringToDOMTree(a);
+	//tree=stringToDOMTree(a);
 	appendChild(tree);
 }
 
@@ -433,7 +452,7 @@ void DOMTree::appendChild(string a, int p)
 {
 	DOMTree tree;
 	
-	tree=stringToDOMTree(a);
+	//tree=stringToDOMTree(a);
 	appendChild(tree,p);
 }
 /*
@@ -471,9 +490,5 @@ std::ostream DOMTree::imprimir_tree(std::ostream& out, Node* root, int tab)
 	return(out);
 }
 */
-
-
-
-
 
 #endif
