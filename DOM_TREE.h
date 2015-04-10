@@ -6,7 +6,7 @@
 
 using std::string;
 using std::cout;
-
+using std::endl;
 class DOMTree
 {
 	private:
@@ -47,6 +47,10 @@ class DOMTree
 		void appendChild(string a);
 		void appendChild(string a, int p);
 		DOMTree operator =(DOMTree const &tree);
+		/*
+		friend std::ostream& operator <<(std::ostream& out, DOMTree tree); //Sobrecarga del operador <<
+		friend std::ostream imprimir_tree(std::ostream& out, Node* root, int tab);
+		*/ 
 };
 
 //Constructores
@@ -432,5 +436,44 @@ void DOMTree::appendChild(string a, int p)
 	tree=stringToDOMTree(a);
 	appendChild(tree,p);
 }
+/*
+std::ostream& operator <<(std::ostream& out, DOMTree tree) //Sobrecarga del operador <<
+{
+	int tab=0;
+	
+	out<<"<"<<tree.document->element().tagName()<<">"<<endl;
+	tree.imprimir_tree(out,tree.document->firstchild(), tab);
+	
+	return (out);
+}
+
+std::ostream DOMTree::imprimir_tree(std::ostream& out, Node* root, int tab)
+{
+	
+	if(root!=NULL)
+	{
+		int i;
+		for (i=0; i<tab; i++)
+		{
+			out<<"	";
+		}
+		
+		out<<"<"<<root->element().tagName();
+		if(!root->element().attributeList().es_vacia())
+			out<<root->element().attributeList();
+		out<<">";
+		out<<root->element().innerHTML()<<endl;
+		
+		out<<this->imprimir_tree(out, root->firstchild(), tab++)<<endl;
+		out<<this->imprimir_tree(out, root->nextsibling(), tab++)<<endl;
+		out<<"<"<<"/"<<root->element().tagName()<<">";
+	}
+	return(out);
+}
+*/
+
+
+
+
 
 #endif
