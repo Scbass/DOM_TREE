@@ -444,7 +444,7 @@ void DOMTree::appendChild(string a)
 {
 	DOMTree tree;
 	
-	//tree=stringToDOMTree(a);
+	tree=stringToDOMTree(a);
 	appendChild(tree);
 }
 
@@ -452,7 +452,7 @@ void DOMTree::appendChild(string a, int p)
 {
 	DOMTree tree;
 	
-	//tree=stringToDOMTree(a);
+	tree=stringToDOMTree(a);
 	appendChild(tree,p);
 }
 /*
