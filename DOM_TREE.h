@@ -23,7 +23,7 @@ class DOMTree
 	public:
 		//Constructores
 		DOMTree(): document(NULL){}
-		DOMTree(Node* docum): document(docum){} //con parametros0
+		DOMTree(Node* docum): document(docum){} //con parametros
 		DOMTree(const DOMTree &a); //copia
 		DOMTree(Element e, Lista<DOMTree > l); // a partir de una lista de hijos
 		//Observadores
@@ -48,10 +48,8 @@ class DOMTree
 		void appendChild(string a);
 		void appendChild(string a, int p);
 		DOMTree operator =(DOMTree const &tree);
-		/*
-		friend std::ostream& operator <<(std::ostream& out, DOMTree tree); //Sobrecarga del operador <<
-		friend std::ostream imprimir_tree(std::ostream& out, Node* root, int tab);
-		*/ 
+		/*friend std::ostream& operator <<(std::ostream& out, DOMTree tree); //Sobrecarga del operador <<
+		friend std::ostream imprimir_tree(std::ostream& out, Node* root, int tab);*/
 };
 
 //Constructores
@@ -372,7 +370,7 @@ DOMTree DOMTree::operator =(DOMTree const &tree)
 DOMTree DOMTree::stringToDOMTree(string d)
 {
 	string tag, inner, aux;
-	Node *doc, *doc2, *child;
+	Node *doc, *doc2;
 
 	d.erase(d.begin());
 	aux=d[0];
@@ -382,7 +380,6 @@ DOMTree DOMTree::stringToDOMTree(string d)
 	d.erase(d.begin());
 	aux=d[0];
 	}
-	cout<<tag<<endl;//*
 	d.erase(d.begin());
 	aux=d[0];
 	while(!(aux=="<"))
@@ -391,11 +388,9 @@ DOMTree DOMTree::stringToDOMTree(string d)
 		d.erase(d.begin());
 		aux=d[0];
 	}
-	cout<<inner<<endl;//*
 	Element elem(tag,inner);
 	doc=new Node(elem);
-	child=doc;
-	cout<<d<<endl; //*
+	DOMTree tree(doc);
 	while(d.length()>1)
 	{
 		tag.erase(); //limpieza de variables
@@ -406,25 +401,22 @@ DOMTree DOMTree::stringToDOMTree(string d)
 		{
 			while(!(aux==">"))
 			{
-			tag=tag+aux;
-			d.erase(d.begin());
-			aux=d[0];
+				tag=tag+aux;
+				d.erase(d.begin());
+				aux=d[0];
 			}
 			d.erase(d.begin());
 			aux=d[0];
-			cout<<tag<<endl;//*
 			while(!(aux=="<"))
 			{
-			inner=inner+aux;
-			d.erase(d.begin());
-			aux=d[0];
+				inner=inner+aux;
+				d.erase(d.begin());
+				aux=d[0];
 			}
-			cout<<inner<<endl;//*
 			Element elem2(tag,inner);
 			doc2= new Node(elem2);
-			child->setFirstChild(doc2);
-			child=doc2;
-			//child=child->nextsibling();
+			DOMTree aux(doc2);
+			tree.appendChild(aux);
 		}
 		else
 		{
@@ -436,7 +428,6 @@ DOMTree DOMTree::stringToDOMTree(string d)
 			d.erase(d.begin());
 		}
 	}
-	DOMTree tree(doc);
 return(tree);
 }
 
