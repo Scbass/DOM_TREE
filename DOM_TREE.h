@@ -8,7 +8,7 @@ using std::string;
 using std::cout;
 using std::endl;
 
-class DOMTree
+class DOM_Tree
 {
 	private:
 		//Atributos
@@ -17,49 +17,48 @@ class DOMTree
 		//Metodos
 		Node* cpy_nodo(Node *root);  
 		void  destroy(Node *root);
-		void altura(Node *root, int &a);
 		void agregarhijo(Node *root, Element padre, Element hijo, bool &band);
 		
 	public:
 		//Constructores
-		DOMTree(): document(NULL){}
-		DOMTree(Node* docum): document(docum){} //con parametros
-		DOMTree(const DOMTree &a); //copia
-		DOMTree(Element e, Lista<DOMTree > l); // a partir de una lista de hijos
+		DOM_Tree(): document(NULL){}
+		DOM_Tree(Node* docum): document(docum){} //con parametros
+		DOM_Tree(const DOM_Tree &a); //copia
+		DOM_Tree(Element e, Lista<DOM_Tree > l); // a partir de una lista de hijos
 		//Observadores
 		bool es_nulo(){return (document==NULL);}
 		Element raiz() {return document->element();}
-		int altura();
 		int max(int x, int y);
-		DOMTree childNode(int p);
-		DOMTree getElementByID(string id);
+		DOM_Tree childNode(int p);
+		DOM_Tree getElementByID(string id);
 		void search_element(Node* raiz ,string id, bool &band, Node* &elemento);
 		//modificadores
-		void appendChild(DOMTree a);
-		void appendChild(DOMTree a, int p);
+		void appendChild(DOM_Tree a);
+		void appendChild(DOM_Tree a, int p);
 		void removeChild(int pos);
 		void agregarhijo(Element padre, Element hijo);
-		void replaceChild(DOMTree a, int p);
+		void replaceChild(DOM_Tree a, int p);
+		DOM_Tree despair(string &d);
 		//Destructores
 		void destroy();
-		~DOMTree();
+		~DOM_Tree();
 		//Sobrercargas
-		DOMTree stringToDOMTree(string d);
+		DOM_Tree stringToDOMTree(string d);
 		void appendChild(string a);
 		void appendChild(string a, int p);
-		DOMTree operator =(DOMTree const &tree);
-		/*friend std::ostream& operator <<(std::ostream& out, DOMTree tree); //Sobrecarga del operador <<
-		friend std::ostream imprimir_tree(std::ostream& out, Node* root, int tab);*/
+		DOM_Tree operator =(DOM_Tree const &tree);
+		friend std::ostream& operator <<(std::ostream& out, DOM_Tree tree); //Sobrecarga del operador <<
+		void imprimir_tree(Node* root, int tab);
 };
 
 //Constructores
-DOMTree::DOMTree(const DOMTree &a)
+DOM_Tree::DOM_Tree(const DOM_Tree &a) 
 {
 	this->document=this->cpy_nodo(a.document);	
 }
 
 
-DOMTree::DOMTree(Element e, Lista<DOMTree > l)
+DOM_Tree::DOM_Tree(Element e, Lista<DOM_Tree > l)
 {
 
 	Node *aux;
@@ -83,7 +82,7 @@ DOMTree::DOMTree(Element e, Lista<DOMTree > l)
 
 //Observadores
 
-Node* DOMTree::cpy_nodo(Node *root)
+Node* DOM_Tree::cpy_nodo(Node *root) //copiar nodos desde el nodo raiz
 {
 	Node *aux;
 	
@@ -96,33 +95,15 @@ Node* DOMTree::cpy_nodo(Node *root)
 	}
 }
 
-void DOMTree::altura(Node *root, int &a)
-{
-	int ai, ad;
-	
-	if(root==NULL)
-		a= -1;
-	else
-	{
-		this->altura(root->firstchild(), ai);
-		this->altura(root->nextsibling(), ad);
-		if(root->firstchild()==NULL)
-			a=max(ai,ad);
-		else
-			a=max(ai,ad)+1;	
-	}
-}
-
-
-int DOMTree::max(int x,int y)
+int DOM_Tree::max(int x,int y)
 {
 	return(x<y ? y:x); 	
 }
 
-DOMTree DOMTree::childNode(int p)
+DOM_Tree DOM_Tree::childNode(int p) //retorna el arbol hijo en la posicion p del arbol padre
 {
 	Node *aux;
-	DOMTree tree;
+	DOM_Tree tree;
 	int i;
 	aux=document;
 	if(p==1)
@@ -148,9 +129,9 @@ DOMTree DOMTree::childNode(int p)
 	return(tree);
 }
 
-DOMTree DOMTree::getElementByID(string id)
+DOM_Tree DOM_Tree::getElementByID(string id) //retorna el arbol de tag correspondiente al id
 {
-	DOMTree tree;
+	DOM_Tree tree;
 	Node *aux=NULL;
 	bool band = false;
 	
@@ -164,7 +145,7 @@ DOMTree DOMTree::getElementByID(string id)
 	
 }
 
-void DOMTree::search_element(Node* raiz ,string id, bool &band, Node* &elemento )
+void DOM_Tree::search_element(Node* raiz ,string id, bool &band, Node* &elemento ) //localiza el tag, moviendose dentro del arbol
 {
 	if(raiz!=NULL)
 	{
@@ -185,7 +166,7 @@ void DOMTree::search_element(Node* raiz ,string id, bool &band, Node* &elemento 
 }
 //Modificadores
 
-void DOMTree::appendChild(DOMTree a)
+void DOM_Tree::appendChild(DOM_Tree a) //añade un hijo al arbol en la ultima posicion
 {
 	Node*aux;
 	
@@ -202,8 +183,7 @@ void DOMTree::appendChild(DOMTree a)
 	}
 }
 
-
-void DOMTree::appendChild(DOMTree a, int p)
+void DOM_Tree::appendChild(DOM_Tree a, int p) //añade un hijo al arbol en la pos indicada
 {
 	Node *prev, *next, *aux;
 	
@@ -235,7 +215,7 @@ void DOMTree::appendChild(DOMTree a, int p)
 	}
 }
 
-void DOMTree::removeChild(int pos)
+void DOM_Tree::removeChild(int pos) //elimina el arbol hijo en la pos indicada
 {
 	Node *prev, *next, *aux;
 	
@@ -275,7 +255,7 @@ void DOMTree::removeChild(int pos)
 }
 
 
-void DOMTree:: agregarhijo(Node *root,Element padre, Element hijo, bool &band)
+void DOM_Tree:: agregarhijo(Node *root,Element padre, Element hijo, bool &band)
 {
 	
 	if(root!=NULL)
@@ -311,30 +291,71 @@ void DOMTree:: agregarhijo(Node *root,Element padre, Element hijo, bool &band)
 	}
 }
 
-void DOMTree::replaceChild(DOMTree a, int p)
+void DOM_Tree::replaceChild(DOM_Tree a, int p) //reemplaza un hijo en la posicion indicada
 {
 	this->removeChild(p);
 	this->appendChild(a, p);
 }
 
-//Privados
-
-
-int DOMTree::altura()
+DOM_Tree DOM_Tree::despair(string &d) //crea los nodos padres a partir de un string
 {
-	int alt;
-	altura(this->document, alt);	
-	return alt;
+	string aux, tag, inner, atributo;
+	Node *doc;
+	Lista<string> l;
+	
+	aux=d[0];
+	if(aux=="<")
+	d.erase(d.begin());
+	aux=d[0];
+	while(!(aux==">") && !(aux==" "))
+	{
+	tag=tag+aux;
+	d.erase(d.begin());
+	aux=d[0];
+	}
+	if(aux==" ")
+	{
+	d.erase(d.begin());
+	aux=d[0];
+	while(!(aux==">"))
+	{
+		while(!(aux==">") && !(aux==" "))
+		{
+		atributo=atributo+aux;
+		d.erase(d.begin());
+		aux=d[0];
+		}
+		d.erase(d.begin());
+		l.insertarEnd(atributo);
+		atributo.erase();
+		if(aux==" ")
+		aux=d[0];
+	}
+	}
+	else
+	d.erase(d.begin());
+	aux=d[0];		
+	while(!(aux=="<"))
+	{
+		inner=inner+aux;
+		d.erase(d.begin());
+		aux=d[0];
+	}
+	Element elem(tag,inner,l);
+	doc=new Node(elem);
+	DOM_Tree tree(doc);
+	l.~Lista();
+	return(tree);
 }
 
-void DOMTree:: agregarhijo(Element padre, Element hijo)
+void DOM_Tree:: agregarhijo(Element padre, Element hijo)
 {
 	bool band=false;
 	this->agregarhijo(document, padre, hijo, band);
 }
 
 
-void DOMTree::destroy()
+void DOM_Tree::destroy() //vaciar el domtree
 {
 	this->destroy(document);
 }
@@ -343,7 +364,7 @@ void DOMTree::destroy()
 //Destructores
 
 
-void DOMTree::destroy(Node *root)
+void DOM_Tree::destroy(Node *root) 
 {
 	if(root!=NULL)
 	{
@@ -353,70 +374,90 @@ void DOMTree::destroy(Node *root)
 	}	
 }
 
-DOMTree::~DOMTree()
+DOM_Tree::~DOM_Tree()
 {
 	destroy(document);
 }
 
 
 //sobrecargas
-DOMTree DOMTree::operator =(DOMTree const &tree)
+DOM_Tree DOM_Tree::operator =(DOM_Tree const &tree)
 {
 	this->document=this->cpy_nodo(tree.document);
 	return(*this);
 	
 }
 
-DOMTree DOMTree::stringToDOMTree(string d)
+DOM_Tree DOM_Tree::stringToDOMTree(string d) //transforma un string en DOMTree
 {
-	string tag, inner, aux;
-	Node *doc, *doc2;
-
+	string tag, inner, aux, atributo;
+	Node *doc2;
+	DOM_Tree tree1, tree2;
+	Lista<string> l; 
+	
+	
+	tree1=despair(d);
 	d.erase(d.begin());
 	aux=d[0];
-	while(!(aux==">"))
+	if(aux=="/")
 	{
-	tag=tag+aux;
-	d.erase(d.begin());
-	aux=d[0];
-	}
-	d.erase(d.begin());
-	aux=d[0];
-	while(!(aux=="<"))
-	{
-		inner=inner+aux;
+		while(!(aux==">"))
+		{
 		d.erase(d.begin());
 		aux=d[0];
+		}
+		d.erase(d.begin());
 	}
-	Element elem(tag,inner);
-	doc=new Node(elem);
-	DOMTree tree(doc);
+	if(d.length()>0)
+	tree2=despair(d);
+	
 	while(d.length()>1)
 	{
-		tag.erase(); //limpieza de variables
+		tag.erase(); //Limpieza de variables
 		inner.erase();
 		d.erase(d.begin());
 		aux=d[0];
 		if(!(aux=="/"))
 		{
-			while(!(aux==">"))
+			while(!(aux==">") && !(aux==" "))
 			{
-				tag=tag+aux;
-				d.erase(d.begin());
-				aux=d[0];
-			}
+			tag=tag+aux;
 			d.erase(d.begin());
 			aux=d[0];
-			while(!(aux=="<"))
+			}
+			if(aux==" ")
 			{
-				inner=inner+aux;
+			d.erase(d.begin());
+			aux=d[0];
+			while(!(aux==">"))
+			{
+				while(!(aux==">") && !(aux==" "))
+				{
+				atributo=atributo+aux;
 				d.erase(d.begin());
 				aux=d[0];
+				}
+			d.erase(d.begin());
+			l.insertarEnd(atributo);
+			atributo.erase();
+			if(aux==" ")
+			aux=d[0];
 			}
-			Element elem2(tag,inner);
+			}
+			else
+			d.erase(d.begin());
+			aux=d[0];		
+			while(!(aux=="<"))
+			{
+			inner=inner+aux;
+			d.erase(d.begin());
+			aux=d[0];
+			}
+			Element elem2(tag,inner,l);
 			doc2= new Node(elem2);
-			DOMTree aux(doc2);
-			tree.appendChild(aux);
+			DOM_Tree aux(doc2);
+			tree2.appendChild(aux);
+			l.~Lista();
 		}
 		else
 		{
@@ -428,58 +469,68 @@ DOMTree DOMTree::stringToDOMTree(string d)
 			d.erase(d.begin());
 		}
 	}
-return(tree);
+	tree1.appendChild(tree2);
+return(tree1);
 }
 
-void DOMTree::appendChild(string a)
+void DOM_Tree::appendChild(string a)
 {
-	DOMTree tree;
+	DOM_Tree tree;
 	
 	tree=stringToDOMTree(a);
 	appendChild(tree);
 }
 
-void DOMTree::appendChild(string a, int p)
+void DOM_Tree::appendChild(string a, int p)
 {
-	DOMTree tree;
+	DOM_Tree tree;
 	
 	tree=stringToDOMTree(a);
 	appendChild(tree,p);
 }
-/*
-std::ostream& operator <<(std::ostream& out, DOMTree tree) //Sobrecarga del operador <<
+
+std::ostream& operator <<(std::ostream& out, DOM_Tree tree) //Sobrecarga del operador <<
 {
 	int tab=0;
 	
-	out<<"<"<<tree.document->element().tagName()<<">"<<endl;
-	tree.imprimir_tree(out,tree.document->firstchild(), tab);
+	out<<"<"<<tree.document->element().tagName()<<">";
+	if(!tree.document->element().attributeList().es_vacia())
+			out<<tree.document->element().attributeList();
+	out<<">";
+	out<<tree.document->element().innerHTML()<<endl;
+	tree.imprimir_tree(tree.document->firstchild(), tab);
 	
 	return (out);
 }
 
-std::ostream DOMTree::imprimir_tree(std::ostream& out, Node* root, int tab)
+void DOM_Tree::imprimir_tree( Node* root, int tab)
 {
 	
 	if(root!=NULL)
 	{
 		int i;
+		
 		for (i=0; i<tab; i++)
 		{
-			out<<"	";
+			cout<<"	";
 		}
 		
-		out<<"<"<<root->element().tagName();
+		cout<<"<"<<root->element().tagName();
 		if(!root->element().attributeList().es_vacia())
-			out<<root->element().attributeList();
-		out<<">";
-		out<<root->element().innerHTML()<<endl;
+			cout<<root->element().attributeList();
+		cout<<">";
+		cout<<root->element().innerHTML();
+		if((root->nextsibling()!=NULL && root->firstchild()==NULL) || (root->nextsibling()==NULL && root->firstchild()==NULL))
+		cout<<"<"<<"/"<<root->element().tagName()<<">"<<endl;
+		else
+		cout<<endl;
+		this->imprimir_tree(root->firstchild(), tab++);
+		this->imprimir_tree(root->nextsibling(), 1);
+		if(root->nextsibling()==NULL && root->firstchild()!=NULL)
+		cout<<"<"<<"/"<<root->element().tagName()<<">"<<endl;
 		
-		out<<this->imprimir_tree(out, root->firstchild(), tab++)<<endl;
-		out<<this->imprimir_tree(out, root->nextsibling(), tab++)<<endl;
-		out<<"<"<<"/"<<root->element().tagName()<<">";
 	}
-	return(out);
 }
-*/
+
 
 #endif
