@@ -531,6 +531,4 @@ void DOM_Tree::imprimir_tree( Node* root, int tab)
 		
 	}
 }
-
-
 #endif
