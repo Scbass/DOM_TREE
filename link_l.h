@@ -8,15 +8,21 @@ template <class gen>
 class Lista
 {
 	private:
+	
 		Nodo<gen> *first, *last;
 		int lon;
+		
 	public:
-		Lista<gen>(): first(NULL), last(NULL),lon(0) {} // constructor
+	
+		//Constructores
+		Lista<gen>(): first(NULL), last(NULL),lon(0){}
 		Lista<gen>(Lista<gen> const &l); //constructor copia
+		//Observadores
 		bool es_vacia() const {return first == NULL;} // Comprueba si la lista esta vacia
 		bool buscar(gen e); // busca un elemento (y)
 		int longitud() const {return lon;} // Retorna la cantidad de elementos que tiene la lista
 		gen consultar_elemento (int pos); //Retorna que elemento esta en una posicion dada
+		//Modificadores
 		void insertar(gen e, int pos); // inserta un elemento en la lista en la posicion indicada
 		void insertarEnd(gen e); //insertar al final 
 		void eliminar(int pos); // elimina un elemento de la lista 
@@ -24,10 +30,12 @@ class Lista
 		void copiar(const Lista<gen> &l); //copia una lista a otra
 		void invertir();
 		void vaciar();
+		//Sobrecargas
 		Lista<gen>& operator =(const Lista &l); // Sobrecarga del operador asignacion =
 		template <class eve>
 		friend std::ostream& operator <<(std::ostream& out, Lista<eve> l); //Sobrecarga del operador <<
-		bool operator ==(Lista<gen> l1); 
+		bool operator ==(Lista<gen> l1);
+		//Destructor 
 		~Lista();
 		
 };
@@ -279,10 +287,6 @@ Lista<gen>::~Lista()
 {
 	this->vaciar();
 }
-
-
-
-
 
 //Sobrecarga de operadores
 
